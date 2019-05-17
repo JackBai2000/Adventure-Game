@@ -1,0 +1,501 @@
+#-------------------------------------------------------------------------------
+# Name:     Adventure_game.py
+# Purpose:
+# Create an adventure game demonstrating the concepts learned in class.
+#
+# Author:      Bai. J
+#
+# Created:     15/01/2016
+#-------------------------------------------------------------------------------
+
+#creates the room list with all the appropriate room descriptions
+room_list = []
+room = ["You appear to be in the main entrance of the castle. A strong sense of power and tyranny is exerted. The room is submerged in black with streaks of red bleeding from the walls.",None,1,None,2]
+room_list.append(room)
+room = ["The guard left, all that remains is a dark room.",None,None,None,0]
+room_list.append(room)
+room = ["The little boy with the maps looks deep in thought... Best to not waste time here.",None,0,None,None]
+room_list.append(room)
+room = ["The women left, only a room consumed in darkness remained...",None,4,None,None]
+room_list.append(room)
+room = ["A gloomy and eerie hallway...",None,5,0,3]
+room_list.append(room)
+room = ["Nothing but an empty pedestal remains, emanating a force of power.",None,None,None,4]
+room_list.append(room)
+room = ["Another large hallway..... hopefully the last.",None,8,4,7]
+room_list.append(room)
+room = ["The little elf boy left, the room remains illuminated by several torches.",None,6,None,None]
+room_list.append(room)
+room = ["The little mole urges to hurry up!",None,None,None,6]
+room_list.append(room)
+room = ["",None,10,6,None]
+room_list.append(room)
+
+#initializes all the necessary variables
+done = False
+current_room = 0
+next_room = 0
+key1 = 0
+key2 = 0
+key3 = 0
+map = 0
+beginning = 0
+bow = 0
+sword = 0
+import time
+
+def prologue():
+    """
+    Introduces the storyline to the user
+    :return: string - prints to the user the prologue
+    """
+    gender = ""
+    name = raw_input("What is your name?")
+    while gender != "boy" or "m" or "f" or "girl":
+        gender = raw_input("Are you a boy or a girl?(Enter m or f): ")
+        gender = gender.lower()
+        if gender == "m":
+            gender = "boy"
+            break
+        elif gender == "f":
+            gender = "girl"
+            break
+
+    raw_input("Ahhhh now I remember.... Your name was " + str(name) + "... You were the " + str(gender) + " that always played with princess Estelle...")
+    raw_input("I remember you two always used to run around and play in the courtyard...")
+    if gender == "Male":
+        raw_input("You two made such a cute couple... Unfortunately you two always had to keep it a secret as you were not a noble...")
+    elif gender == "Female":
+        raw_input("You two were such close friends, always looking out for you. Unfortunately you two always had to keep it a secret as you were not a noble... ")
+    raw_input("In this world of fantasy, where elves, dwarves, dragons, and magic were all of the ordinary...")
+    raw_input("The world seemed to be a place of beauty, of peace, of happiness...")
+    raw_input("But as high as this world rose, as low as it has fallen...")
+    raw_input("A man by the name of Hohenheim corrupted with power has been experimenting with human sacrifice for years...")
+    raw_input("and now...")
+    raw_input("He has taken Estelle...")
+    raw_input("I am but a helpless old man... But you..." + str(name) + "... are the only who can save her... ")
+    raw_input("Now go young one! Head to the castle and save her!")
+    raw_input("BASIC COMMANDS TUTORIAL")
+    raw_input("Dialogue as you may have noticed will be given through these boxes where you can enter anything to continue.")
+    raw_input("Mental notes and things you notice will be down there.")
+    print "Here is where things you notice will appear!"
+    raw_input("As of right now you are inside Hohenheim's Castle and will need to navigate your way to the Laboratory!")
+    raw_input("In order to make progress towards the end, there will be keys in rooms for you to find to unlock more hallways.")
+    raw_input("Each room will have a puzzle or riddle to solve!")
+    raw_input("There will also be special equipment that are necessary for you to fight Hohenheim so make sure to collect them all!")
+    raw_input("Oh, and before you start.... Here's a hint!\n Someone has a map in one of the nearby rooms, you might want to find that first and good luck!")
+
+def wrongway():
+    """
+    Tells the user that the tried to go to a room that they cannot access
+    :return: string - tells them to pick a different direction
+    """
+    print "You cannot go that way."
+    print ""
+    print "Please select a different direction."
+
+def maproom():
+
+    """
+    Riddle for the user to complete to obtain the map
+    :return: string - gives the user access to the map
+    """
+    print "A confused little boy calls out to you!"
+    raw_input("Hey there! I have a map but I can't seem to make sense of it!")
+    raw_input("I have a bunch of copies but they're all too dusty!")
+    raw_input("If you can help me solve each of the words...")
+    raw_input("I'll give you a copy of a map that you can keep!")
+    raw_input("(Fill in the missing letter to each of the words.)")
+
+    map1 = raw_input("Ho_enheim")
+    map1 = map1.lower()
+    while map1 != "h":
+        raw_input("I don't think that makes much sense.... Take another look at it!")
+        map1 = raw_input("Ho_enheim")
+        map1 = map1.lower()
+    if map1 == "h":
+        raw_input("Ahhh.. Hohenheim makes so much sense! Can't believe I didn't see that one...")
+
+    map2 = raw_input("La_")
+    map2 = map2.lower()
+    while map2 != "b":
+        raw_input("I don't think that makes much sense.... Take another look at it!")
+        map2 = raw_input("La_")
+        map2 = map2.lower()
+    if map2 == "b":
+        raw_input("Okay im starting to get a little embarrassed for not knowing that one...")
+
+    map3 = raw_input("Ca_tle")
+    map3 = map3.lower()
+    while map3 != "s":
+        raw_input("I don't think that makes much sense.... Take another look at it!")
+        map3 = raw_input("Ca_tle")
+        map3 = map3.lower()
+    if map3 == "s":
+        raw_input("Well I mean it COULD have been \"Cattle\" but Castle make a whole lot more sense.")
+
+    map4 = raw_input("_eys")
+    map4 = map4.lower()
+    while map4 != "k":
+        raw_input("I don't think that makes much sense.... Take another look at it!")
+        map4 = raw_input("_eys")
+        map4 = map4.lower()
+    if map4 == "k":
+        raw_input("Hey! I prolly coulda solved that one myself!")
+
+        map5 = raw_input("H_ll")
+        map5 = map5.lower()
+    while map5 != "a":
+        raw_input("I don't think that makes much sense.... Take another look at it!")
+        map5 = raw_input("H_ll")
+        map5 = map5.lower()
+    if map5 == "a":
+        raw_input("Wow! That makes a whole lot more sense than what I thought what it meant!")
+
+    raw_input("Well, a deal's a deal! I hope this map helps you as much as you helped me!")
+    raw_input("You can access the map whenever you are moving to a direction by typing \"map\"!")
+
+def dungeonmap():
+    """
+    Prints the map to the user if they requested it
+    :return: string - a map of the castle
+    """
+    print" Hohenheim's Castle"
+    print"      _______      "
+    print"      |  *  |      "
+    print" _____|_____|_____ "
+    print"|  ?  | Hall| Key |"
+    print"|_____|_____|_____|"
+    print"| Key | Hall|  ?  |"
+    print"|_____|_____|_____|"
+    print"|  ?  |Start| Key |"
+    print"|_____|_____|_____|"
+    raw_input("This is the map of the entire castle!")
+    raw_input("? = A special item, Keys allow access to the next hallway, * = Boss")
+
+def keytest1():
+    """
+    Riddle for the user to complete to gain the first key to go north
+    :return: string - sets the key value to 1 and tells the user they have the key
+    """
+    print "A tough looking guard slowly lugs himself towards you."
+    raw_input("Heh. A little kid like you wandering around in a castle huh?")
+    raw_input("Well you're not gonna get very far without me.")
+    raw_input("ll give you a key if you can answer this foolish question: ")
+    answer1 = raw_input("What is Fool's Gold?\nA) Potatoes\nB) Silver\nC) Pyrite")
+    answer1 = answer1.lower()
+    while answer1 != "c":
+        raw_input("Look here buddy, I'm not letting you go until you solve my question, this is gonna help you more than it's gonna help me.")
+        answer1 = raw_input("What is Fool's Gold?\nA) Potatoes\nB) Silver\nC) Pyrite")
+    if answer1 == "c":
+                raw_input("Here take this key. Just to let you know, I'm a good guy, just wanted to have a little fun y'know? Heheheh...")
+    room_list[0][1] = 4
+    key1 == 1
+    raw_input("The cold bronze key lays in your hand, best to pocket it.")
+
+def keytest2():
+    """
+    Riddle for the user to finish in order to get the second key
+    :return: string - sets the second key value to 1 and informs them that they now have another key
+    """
+    print "An elegant elven woman approaches you."
+    raw_input("Woah!! I can sense the courage in your heart!")
+    raw_input("But for you to accept my gift, I must test your wisdom!")
+    answer2 = raw_input(" What do you own that others use more than you?\nA) Your name \nB) Your food \nC) Your phone")
+    answer2 = answer2.lower()
+    while answer2 != "a" :
+        raw_input("Come on brave boy, I know you can do better than that! Here, I'll ask you again!")
+        answer2 = raw_input(" What do you own that others use more than you?\nA) Your name \nB) Your food \nC) Your phone")
+    if answer2 == "a":
+        raw_input("I knew you could do it!!! Take this key and be the hero you were destined to be!")
+    room_list[4][1] = 6
+    key2 == 1
+    raw_input("The silver key gives off a special shine to it as you place it into your pocket.")
+
+def keytest3():
+    """
+    Riddle for the user to complete to get the final key
+    :return: string - sets the final key value to 1 and tells you that you have the last key
+    """
+    print "You feel a small tremor as something pokes itself out of the ground..."
+    raw_input("Hey there buddy!")
+    raw_input( "I'm a talkin' mole! I knew yous on a journey to save yar damsel in distress.")
+    raw_input("If you solve this , I'll give yee this treasured golden key!")
+    answer3 = raw_input("Find three positive whole numbers that have the same answer added together or when multiplied together.\nA) 7 8 and 9  \nB) 1 2 and 3  \nC) 23 24 and 25")
+    answer3 = answer3.lower()
+    while answer3 != "b":
+        raw_input("Pal, I don't think that works..... Can ya think a somethin' else?")
+        answer3 = raw_input("Find three positive whole numbers that have the same answer added together or when multiplied together.\nA) 7 8 and 9  \nB) 1 2 and 3  \nC) 23 24 and 25")
+    if answer3 == "b":
+        raw_input("Wow kiddo! Your noggin sure knows how to work its way around a little math! Take this key and hurry!")
+    key3 == 1
+    raw_input("Surprisingly enough, the talking mole had the most powerful golden key... Confused yet satisfied, you put it into your pocket.")
+
+def swordtest():
+        """
+        Creates an interactive challenge for the user to play through to obtain the sword
+        :return: string - sets sword to 1 and tells them that they own the sword once they have successfully completed the challenge
+        """
+        print "A sword of great power appears before you! The sword calls to you!"
+        raw_input("Thou shall only be worthy if thou can pass thy test!\nThy test is one of speed!\nThou shall be entering words as fast as you can EXACTLY as it appears!(Case-Sensitive!).\nIf you get them all correct before the time limit of 30s ends, the sword is yours!\nPress ENTER to begin!")
+        listofwords= ["Parry","Slash","Swing","Sheath","Blade","Power","Agility","Swift","Agile","Potential","Skill","Expertise"]
+        userlist = []
+        elapsed = 0
+        sword = 0
+        start = time.time()
+        play = True
+        i = 0
+        while elapsed < 30 and play:
+            while i < 12:
+                word = raw_input(listofwords[i])
+                userlist.append(word)
+                print "{0:0.2f} seconds have passed...".format(elapsed)
+                if word!= listofwords[i]:
+                    print "The sword does not call for you, start over, quick you don't have much time!"
+                    elapsed = 0
+                    i = 0
+                    userlist = []
+                    start = time.time()
+                    break
+                elapsed = time.time() - start
+                i += 1
+                if userlist == listofwords and elapsed < 30:
+                    print "You've completed the challenge and now rightfully own the Sword!"
+                    sword = 1
+                    start = 0
+                    i = 13
+                    play = False
+                elif elapsed >30:
+                    raw_input("Sorry you did not complete the challenge in time. Press ENTER to restart")
+                    i = 0
+                    start= time.time()
+                    elapsed = 0
+def bowroom():
+    """
+    Interactive memory game for the user to complete to get the bow
+    :return: string - congratulates the user for finishing the challenge and gives them the bow
+    """
+    bow = 0
+    print "A little elf boy skips towards you with a subtle grin."
+    raw_input("Oh hey there! I know you'll need this elven bow, but I'm only gonna give it to ya if you can solve my memory game!")
+    while bow == 0:
+        colourlist= []
+        answercolourlist = ["white","orange","green","purple"]
+        listofquestions = ["What colour is Black?","What colour is Blue?","What colour is Red?","What colour is Yellow?"]
+        raw_input("Remember these carefully!")
+        raw_input("Black = White \nRed = Green \nBlue = Orange \nYellow = Purple ")
+        for i in range(0,4):
+            colour = raw_input(listofquestions[i])
+            colour = colour.lower()
+            colourlist.append(colour)
+        if colourlist == answercolourlist:
+            raw_input("Congratulations! This bow is now yours!")
+            raw_input("He hands to you a beautifully crafted bow with a design of an angelic nature!")
+            break
+        if colourlist != answercolourlist:
+            raw_input("Try again! Your answers aren't all right!")
+
+def hohenheimfight():
+    """
+    The function for the final fight with the antagonist
+    :return: string - ends the game or restarts the fight function
+    """
+    import random
+    hohenheim_attack_algorithm = []
+    hohenheim = 12
+    health = 5
+    raw_input("Heh. What is a pitiful kid in my glorious castle doing?")
+    raw_input("You think you can even stand a chance against me?")
+    raw_input("You're better of just running away if you value your life!")
+    raw_input("You: That's not gonna happen. I've come here for one thing and I'm not gonna let anyone stop me!")
+    raw_input("Well don't mistake courage for recklessness!")
+    for i in range(0,1000):
+        if health < 0:
+            health = 0
+        if hohenheim < 0:
+            hohenheim = 0
+
+        print ""
+        print "Hohenheim currently has",hohenheim,"Health!"
+        print ""
+        print "You currently have",health,"Health!"
+        hohenheim_attack_algorithm.append(random.randint(1,3))
+        if hohenheim_attack_algorithm[i] == 1:
+            quickcast = raw_input("Heh. Lets see if you can react to my Fireball! \nA) Dodge! \nB) Use your bow!\nC) Block it with your Sword!")
+            quickcast = quickcast.lower()
+            if quickcast == "a":
+                raw_input("Is running the only thing you can do?")
+            elif quickcast == "b":
+                print "Ahhhhh! I couldn't use my bow quick enough!"
+                raw_input("Ha! Doesn't take me long to cast a tiny fireball like that!")
+                health = health - 2
+            elif quickcast == "c":
+                raw_input("Heh. You actually blocked that huh?")
+            else:
+                raw_input("Please type only \"a\", \"b\", or \"c\" ")
+        if hohenheim_attack_algorithm[i] == 2:
+            longcast = raw_input("I guess I can finally test my strength. See if you can survive my Pyroblast! Trust me, you won't be able to dodge this one! \nA) Try to dodge? \nB) Use your bow!\nC) Charge at him with your sword!")
+            longcast = longcast.lower()
+            if longcast == "a":
+                health = health - 4
+                print "AHHH!! What was I thinking!?!?!"
+                raw_input("Funnily enough, you should have taken advice from your enemy.")
+            elif longcast == "b":
+                raw_input("Dam. Can't believe you shot that fast. GRRR!!!!! Now I'm REALLY going to kill you!")
+                hohenheim = hohenheim - 1
+            elif longcast == "c":
+                raw_input("How weak do you think I am? Casting even a powerfull spell like that doesn't take me long!")
+                health = health - 4
+        if hohenheim_attack_algorithm[i] == 3:
+            close_combat = raw_input("Pfft. Maybe I don't even have to use my magic to fight you! Let me try pulverizing your head into the ground! \nA) Dodge! \nB) Use your bow! \nC) Fight him with your sword!")
+            if close_combat == "a":
+                raw_input("Quit dodging so I can SMASH your head in!")
+            elif close_combat == "b":
+                print "Ughh... for a mad scientist you're pretty fast!"
+                raw_input("Heh. Don't underestimate me kid.")
+                health = health - 1
+            elif close_combat == "c":
+                raw_input("That sword again! That's MY sword! Why do you even have that!?!?")
+                hohenheim = hohenheim - 2
+        if hohenheim <= 0:
+            print "Hohenheim has run out of health, and descends to the ground hopelessly."
+            raw_input("I can't believe it...")
+            raw_input("I've lost to a mere child...")
+            raw_input("Maybe...I was wrong all this time...")
+            raw_input("Maybe... The value of a human life was so much more than I thought...")
+            break
+
+        elif health <= 0:
+            print "You fall hopelessly to the ground as you have lost all your health..."
+            retry = raw_input("TRY AGAIN?(y/n)")
+            if retry == "y":
+                hohenheimfight()
+            if retry == "n":
+                raw_input("Thanks for playing, hope you had fun!")
+                break
+
+def happyending():
+    """
+    Prints the ending dialogue to the game
+    :return: string - the happy ending of the game
+    """
+    raw_input("Estelle: Is that... you.....?" )
+    raw_input("You: Estelle! Are you safe! Did Hohenheim do anything to hurt?")
+    raw_input("Estelle: No... not yet at least...")
+    raw_input("You: You don't seem okay... Does your head hurt?")
+    raw_input("Estelle: Don't worry about me... Let's just.... get out of here...")
+    raw_input("You: Alright! Don't worry! You'll be back and better than ever!")
+    raw_input("???: Hey pal! I knew you had it in you!")
+    raw_input("???: Wisdom, Courage, and Power, I knew I'd seen potential in you!")
+    raw_input("You: It's the talking mole! The elf! The guy who didn't know the maps!")
+    raw_input("Map Guy: Hey we have names y'know!")
+    raw_input("You: Well you don't really know mine either...")
+    raw_input("Estelle: Who are these people?")
+    raw_input("You: These are all the people that helped me save you!")
+    raw_input("You: Estelle....? Why are you crying?")
+    raw_input("Estelle: It's... It's... nothing!")
+    raw_input("You: Seeing you smile like that... reminds me why I devoted my heart to saving you...")
+    raw_input("???: Don't get too comfy you two, were getting out of here first!")
+    raw_input("And so...")
+    raw_input("All the characters had escaped from Hohenheim's Castle and returned to where they lived.")
+    raw_input("After talking to her father, Estelle convinced her father that you were a man deserving a much greater title.")
+    raw_input("The king explains that he always saw you two playing together but decided to not stop you.")
+    raw_input("The king assigned you to be Estelle's bodyguard and friend, and to look over her.")
+    raw_input("Everyone lived happily ever after.")
+    print "            _________          _______      ______         _____           "
+    print "                |      |   |   |            |       |\   | |    \          "
+    print "                |      |   |   |            |       | \  | |     \         "
+    print "                |      |___|   |_____       |_____  |  \ | |     /         "
+    print "                |      |   |   |            |       |   \| |    /          "
+    print "                |      |   |   |______      |______ |    | |___/           "
+
+#navigations and challenges in corporated in the while loop
+while done != True:
+
+#displays the prologue once to the user
+    while beginning == 0:
+        prologue()
+        beginning = 1
+
+#checks to see if the first key room has been visited and completed, if not, triggers the first riddle and gives a key once completed
+    if next_room == 1 and key1 == 0:
+        keytest1()
+        key1 = 1
+
+#checks to see if the second key room has been visited and completed, if not, triggers the second riddle and gives a key once completed
+    if next_room == 3 and key2 == 0:
+        keytest2()
+        key2 = 1
+
+#checks to see if the thirdy key room has been visited and completed, if not, triggers the third riddle and gives a key once completed
+    if next_room == 8 and key3 == 0:
+        keytest3()
+        key3 = 1
+
+#checks to see if the sword challenge has been played, if not, triggers the sword challenge and once completed, gives them the sword
+    if next_room == 5 and sword == 0:
+        swordtest()
+        sword = 1
+
+#checks to see if the bow challenge has been played, if not triggers the bow challenge and once completed, gives them the bow
+    if next_room == 7 and bow == 0:
+        bowroom()
+        bow = 1
+
+#checks to see if the user has obtained the map, if not, triggers the map game to allow them to get the map
+    if next_room == 2 and map == 0:
+        maproom()
+        map = 1
+#if the user tries to enter the boss room without the necessary requirements, tell the user that they need to get them
+    if current_room == 9 and direction.lower() == "n":
+        raw_input("In order to fight Hohenheim, I should have two weapons and a key to unlock this room!")
+
+#if the user has met all the neccessary requirements, allow the user to trigger the boss fight
+    if  key3 == 1 and bow == 1 and sword == 1:
+        room_list[6][1] = 9
+
+#if the user enters the boss room while ALL the neccessary requirements
+    if next_room == 9 and key3 == 1 and bow == 1 and sword == 1:
+        hohenheimfight()
+        happyending()
+        break
+        done = True
+
+#navigation between the rooms
+    print ""
+    print (room_list[current_room])[0]
+    print ""
+    direction = raw_input("Which direction would you like to go?(N,E,S,W, If you would like to quit type \"Quit\"): ")
+
+    if direction.lower() == "quit":
+        done = True
+
+    if direction.lower() == "map" and map == 1:
+        dungeonmap()
+
+    if direction.lower() == "n":
+        next_room = room_list[current_room][1]
+        if next_room == None:
+            wrongway()
+        else:
+            current_room = next_room
+    elif direction.lower() == "e":
+        next_room = room_list[current_room][2]
+        if next_room == None:
+            wrongway()
+        else:
+            current_room = next_room
+
+    elif direction.lower() == "s":
+        next_room = room_list[current_room][3]
+        if next_room == None:
+            wrongway()
+        else:
+            current_room = next_room
+
+    elif direction.lower() == "w":
+        next_room = room_list[current_room][4]
+        if next_room == None:
+            wrongway()
+        else:
+            current_room = next_room
